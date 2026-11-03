@@ -1,0 +1,8 @@
+# runtime + private — never publish
+state/
+data/
+PRIVATE-OPS.md
+__pycache__/
+*.pyc
+*.log
+.cache/

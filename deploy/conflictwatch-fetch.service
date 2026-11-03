@@ -1,0 +1,8 @@
+[Unit]
+Description=ConflictWatch data fetch (Iran/Mideast -> personal impact)
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 %h/Projects/conflictwatch/fetcher.py
+TimeoutStartSec=420
+Nice=10

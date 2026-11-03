@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Iran & Mideast — Personal Impact (Bangkok)</title>
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--ink:#15181d;--mut:#5b6472;--line:#e3e6eb;
+--crit:#b3261e;--high:#b26a00;--mod:#0b6e4f;--low:#3b5566;--accent:#0b57d0;}
+@media (prefers-color-scheme:dark){:root{--bg:#101318;--card:#1a1e26;--ink:#e8eaed;--mut:#9aa4b2;--line:#2a303b;
+--crit:#ff6b61;--high:#f0a94a;--mod:#5ad39a;--low:#8fa8c0;--accent:#8ab4f8}}
+*{box-sizing:border-box}
+body{margin:0;font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink)}
+.wrap{max-width:980px;margin:0 auto;padding:14px}
+header{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:6px}
+h1{font-size:19px;margin:0}
+.fresh{font-size:12px;color:var(--mut)}
+.level{display:inline-block;padding:2px 10px;border-radius:14px;font-weight:700;color:#fff;font-size:13px}
+.level.Critical{background:var(--crit)}.level.High{background:var(--high)}
+.level.Moderate{background:var(--mod)}.level.Low{background:var(--low)}.level.Unclear{background:#6b4fa0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:10px 0}
+.topnow h2{margin:2px 0 6px;font-size:15px}
+.why{color:var(--mut);font-size:13px;margin-bottom:6px}
+ol.top3{margin:6px 0 0;padding-left:20px}
+ol.top3 li{margin:3px 0;font-size:14px}
+.filters{display:flex;flex-wrap:wrap;gap:8px}
+select{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:6px 8px;font-size:13px}
+.ev{border-left:4px solid var(--low)}
+.ev.critical{border-left-color:var(--crit)}.ev.high{border-left-color:var(--high)}.ev.moderate{border-left-color:var(--mod)}
+.ev h3{margin:0 0 4px;font-size:14.5px}
+.meta{display:flex;flex-wrap:wrap;gap:6px;font-size:12px;color:var(--mut);margin:4px 0}
+.badge{border:1px solid var(--line);border-radius:10px;padding:1px 8px;background:transparent;font-size:11.5px}
+.badge.sev_critical{color:var(--crit);border-color:var(--crit);font-weight:700}
+.badge.sev_high{color:var(--high);border-color:var(--high);font-weight:700}
+.badge.st_unverified,.badge.st_official-claim{color:var(--high)}
+.badge.st_collapsed{color:var(--crit);border-color:var(--crit);font-weight:700}
+.badge.st_declining{color:var(--high);border-color:var(--high)}
+.badge.st_normal{color:var(--mod)}
+.badge.st_elevated{color:#6b4fa0}
+.badge.st_confirmed{color:var(--mod)}
+.badge.st_disputed{color:#6b4fa0}
+.srcs{margin:4px 0 0;font-size:12.5px}
+.srcs a{color:var(--accent);text-decoration:none;margin-right:10px}
+.srcs a:hover{text-decoration:underline}
+.note{font-size:12.5px;color:var(--high);margin-top:4px}
+h2.sec{font-size:15px;margin:18px 0 4px}
+ul.watch{margin:6px 0;padding-left:20px;font-size:13.5px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:640px){.grid2{grid-template-columns:1fr}}
+.prices{font-size:13px}.prices td{padding:2px 10px 2px 0}.up{color:var(--crit)}.dn{color:var(--mod)}
+.srcfail{color:var(--crit);font-weight:600}
+.outlook p{font-size:13.5px;margin:6px 0}
+.xai{font-size:13px;color:var(--ink);white-space:pre-wrap;background:transparent}
+.xai .tag{font-size:11px;color:var(--mut)}
+.ahist{font-size:12.5px;color:var(--mut)}
+footer{font-size:12px;color:var(--mut);margin:18px 0}
+</style>
+</head>
+<body><div class="wrap">
+<header>
+  <h1>Mideast conflict — impact on Bangkok <span id="level" class="level Low">…</span></h1>
+  <div class="fresh" id="fresh">loading…</div>
+</header>
+<div class="card topnow">
+  <h2>What matters to me now</h2>
+  <div class="why" id="why"></div>
+  <ol class="top3" id="top3"></ol>
+  <div class="why" id="health"></div>
+</div>
+
+<h2 class="sec">Live event feed</h2>
+<div class="card filters" id="filters">
+  <select id="f-sev"><option value="">Severity: any</option><option>critical</option><option>high</option><option>moderate</option><option>low</option></select>
+  <select id="f-status"><option value="">Status: any</option><option>confirmed</option><option>developing</option><option>unverified</option><option>disputed</option><option>official-claim</option></select>
+  <select id="f-tag"><option value="">Topic: any</option></select>
+  <select id="f-region"><option value="">Location: any</option></select>
+  <select id="f-bias"><option value="">Source type: any</option></select>
+</div>
+<div id="feed"></div>
+
+<div class="grid2">
+  <div><h2 class="sec">Next 24 hours — outlook</h2>
+  <div class="card outlook" id="outlook"></div></div>
+  <div><h2 class="sec">Watchlist</h2><div class="card" id="watch"></div>
+  <h2 class="sec">Market proxies</h2><div class="card" id="prices"></div></div>
+</div>
+
+<h2 class="sec">Airspace pulse — ADS-B traffic indicator <span class="why">(free OpenSky data; fewer planes = airspace likely being avoided or closed — an indicator, not a NOTAM)</span></h2>
+<div class="card" id="pulse"></div>
+
+<h2 class="sec">My flights <span class="why">(itinerary-level status; AeroDataBox free tier)</span></h2>
+<div class="card" id="myflights"></div>
+
+<h2 class="sec">X discovery digest (Grok-synthesized — unverified)</h2>
+<div class="card"><div class="xai" id="xai"></div><div class="tag">Machine summary of X posts. Treat as leads, not facts. Links above feed cards are primary.</div></div>
+
+<h2 class="sec">Alert history</h2>
+<div class="card" id="ahist"></div>
+
+<footer>Basics: independent = 2+ news outlets w/ different domains → "confirmed". State-affiliated (CGTN/Xinhua) and official claims are labeled and never counted as independent. Extraordinary nuclear claims need official agency + wire corroboration. All page text is rendered as plain text — fetched content is data, never instructions.
+Monitoring runs even with this tab closed (systemd timer every 15 min + xAI discovery every 30 min); notifications stop if this computer is off.
+Sources: BBC, Al Jazeera, CNN, CNA, Reuters, gCaptain via RSS/Google News; CGTN & Xinhua as state-affiliated; xAI x_search for X.com discovery.</footer>
+</div>
+<script>
+const TZ="Asia/Bangkok";
+let SNAP=null;
+const $=id=>document.getElementById(id);
+const fmtTime=ts=>new Intl.DateTimeFormat("en-GB",{timeZone:TZ,dateStyle:"medium",timeStyle:"short"}).format(ts*1000);
+const ago=ts=>{const m=Math.floor((Date.now()/1000-ts)/60);return m<60?m+"m ago":m<1440?Math.floor(m/60)+"h ago":Math.floor(m/1440)+"d ago";};
+function opt(sel,vals){sel.innerHTML='<option value="">'+sel.options[0].text+'</option>'+vals.map(v=>`<option>${v}</option>`).join("");}
+function render(){
+  if(!SNAP)return;
+  const ev=SNAP.events,top=Object.fromEntries((SNAP.top3||[]).map((id,i)=>[id,i]));
+  $("level").textContent=SNAP.level;$("level").className="level "+SNAP.level;
+  $("why").textContent=SNAP.level_why;
+  $("fresh").textContent="Data as of "+fmtTime(SNAP.as_of)+" ICT (updated "+ago(SNAP.as_of)+")";
+  const fails=Object.entries(SNAP.sources||{}).filter(([k,v])=>!v.ok).map(([k,v])=>k);
+  $("health").innerHTML = fails.length? '<span class="srcfail">Source outages: '+fails.map(f=>f).join(", ")+'</span> — coverage reduced.' : "All collectors healthy.";
+  $("top3").textContent="";
+  (SNAP.top3||[]).forEach(id=>{const e=ev.find(x=>x.id===id);if(!e)return;const li=document.createElement("li");
+    li.textContent=e.title+"  ["+e.severity+"/"+e.status+"]";$("top3").appendChild(li);});
+  // filter options
+  const tags=[...new Set(ev.flatMap(e=>e.tags||[]))].sort(),regs=[...new Set(ev.flatMap(e=>e.regions||[]))].sort(),biases=[...new Set(ev.flatMap(e=>e.biases||[]))].sort();
+  const sig=[tags.join(","),regs.join(","),biases.join(","),tags.length+regs.length].join("|");
+  if(opt.sig!==sig){opt($("f-tag"),tags);opt($("f-region"),regs);opt($("f-bias"),biases);opt.sig=sig;
+    const sel=[...document.querySelectorAll(".filters select")].map(s=>s.value);
+    [...document.querySelectorAll(".filters select")].forEach((s,i)=>s.value=sel[i]);}
+  const fs=[...document.querySelectorAll(".filters select")].map(s=>s.value);
+  $("feed").textContent="";
+  let shown=0;
+  for(const e of ev){
+    if(shown>=120)break;
+    if(fs[0]&&e.severity!==fs[0])continue;
+    if(fs[1]&&e.status!==fs[1])continue;
+    if(fs[2]&&!(e.tags||[]).includes(fs[2]))continue;
+    if(fs[3]&&!(e.regions||[]).includes(fs[3]))continue;
+    if(fs[4]&&!(e.biases||[]).includes(fs[4]))continue;
+    shown++;
+    const c=document.createElement("div");c.className="card ev "+e.severity;
+    const h=document.createElement("h3");h.textContent=e.title;c.appendChild(h);
+    const m=document.createElement("div");m.className="meta";
+    const add=(t,cl)=>{const b=document.createElement("span");b.className="badge "+(cl||"");b.textContent=t;m.appendChild(b);};
+    add(e.severity.toUpperCase(),"sev_"+e.severity);add(e.status.toUpperCase(),"st_"+e.status);
+    add("updated "+ago(e.last_update));add("event ~"+fmtTime(e.event_time));
+    (e.regions||[]).forEach(r=>add(r));
+    c.appendChild(m);
+    const ind=document.createElement("div");ind.className="meta";
+    ind.textContent=(e.independent_domains&&e.independent_domains.length>=2?
+      "Independent corroboration: "+e.independent_domains.join(", "):
+      "Single-source / repeat coverage")+(e.note?" — "+e.note:"");
+    c.appendChild(ind);
+    const s=document.createElement("div");s.className="srcs";
+    Object.entries(e.links||{}).slice(0,4).forEach(([d,u])=>{if(!u||u.startsWith("https://news.google.com/r?")===false&&u==="")return;
+      const a=document.createElement("a");a.textContent=d;a.href=u;a.rel="noopener noreferrer nofollow";a.target="_blank";s.appendChild(a);});
+    c.appendChild(s);
+    const bs=document.createElement("div");bs.className="meta";bs.textContent="sources: "+(e.sources||[]).join("; ")+" | type: "+(e.biases||[]).join(", ");
+    c.appendChild(bs);
+    $("feed").appendChild(c);
+  }
+  if(!shown){const d=document.createElement("div");d.className="card";d.textContent="No events match the current filters."; $("feed").appendChild(d);}
+  // watchlist
+  $("watch").textContent="";
+  (SNAP.watchlist||[]).forEach(w=>{const li=document.createElement("div");li.textContent="• "+w.text+" ("+ago(w.ts)+")";$("watch").appendChild(li);});
+  if(!(SNAP.watchlist||[]).length){const d=document.createElement("div");d.className="meta";d.textContent="No warning signs triggered."; $("watch").appendChild(d);}
+  // prices
+  const pt=document.createElement("table");pt.className="prices";
+  (SNAP.prices||[]).forEach(p=>{const tr=document.createElement("tr");
+    const c1=document.createElement("td");c1.textContent=p.label;
+    const c2=document.createElement("td");c2.textContent=p.ok?(" "+p.price+(p.chg_pct_day==null?"":" ("+(p.chg_pct_day>=0?"+":"")+p.chg_pct_day+"%)")):"stale";
+    if(p.ok&&p.chg_pct_day!=null)c2.className=p.chg_pct_day>0?"up":"dn";
+    tr.appendChild(c1);tr.appendChild(c2);pt.appendChild(tr);});
+  $("prices").textContent="";$("prices").appendChild(pt);
+  // airspace pulse
+  $("pulse").textContent="";
+  const boxes=Object.values((SNAP.airspace&&SNAP.airspace.boxes)||{});
+  if(!boxes.length){const d=document.createElement("div");d.className="meta";d.textContent="No ADS-B samples yet — first sweep pending.";$("pulse").appendChild(d);}
+  boxes.forEach(b=>{
+    const row=document.createElement("div");row.className="meta";
+    const s1=document.createElement("span");s1.textContent=(b.label+(b.personal?" · my-route ref":""))+": ";row.appendChild(s1);
+    const s2=document.createElement("span");s2.textContent=(b.count==null?"no data":b.count+" aircraft")+(b.baseline_med?` (typical ~${b.baseline_med})`:"");row.appendChild(s2);
+    const bg=document.createElement("span");bg.className="badge st_"+b.state;bg.textContent=b.state.toUpperCase()+(b.ratio!=null?` · ${b.ratio}× normal`:"");row.appendChild(bg);
+    const t=document.createElement("span");t.textContent=" "+(b.ts?ago(b.ts)+"":"—");row.appendChild(t);
+    $("pulse").appendChild(row);});
+  if(SNAP.airspace&&boxes.every(b=>b.state==="warming")){
+    const n=document.createElement("div");n.className="why";n.textContent="Baselines build from ~1-2 days of samples (day/night traffic differs). Until then, counts are shown without judgment.";$("pulse").appendChild(n);}
+  // my flights
+  $("myflights").textContent="";
+  const fl=SNAP.flights||{};
+  if(fl.flights&&fl.flights.length){
+    fl.flights.forEach(f=>{const row=document.createElement("div");row.className="meta";
+      row.textContent=`${f.flight} ${f.date}: `+(f.ok?(f.status+(f.delay_dep_min?` (+${f.delay_dep_min} min dep delay)`:"")):("data unavailable ("+(f.err||"err")+")"))+` · checked ${ago(f.ts)}`;
+      $("myflights").appendChild(row);});
+  } else {const d=document.createElement("div");d.className="why";d.textContent=fl.note||"Layer B idle.";$("myflights").appendChild(d);}
+  if(fl.has_key===false&&fl.configured){const w=document.createElement("div");w.className="note";w.textContent="Key missing — flights configured but can't be checked yet."; $("myflights").appendChild(w);}
+  // outlook
+  $("outlook").textContent="";
+  const p1=document.createElement("p");p1.textContent="Baseline: "+outlookBase();
+  const p2=document.createElement("p");p2.textContent="Escalation scenario: "+outlookEsc();
+  const p3=document.createElement("p");p3.className="why";p3.textContent="Forecasts are scenario reasoning from current reports, not probabilities.";
+  $("outlook").append(p1,p2,p3);
+  // xai
+  $("xai").textContent="";
+  Object.entries(SNAP.xai_summaries||{}).forEach(([k,v])=>{
+    const d=document.createElement("div");d.textContent=v.text;$("xai").appendChild(d);
+    const t=document.createElement("div");t.className="tag";t.textContent=k.replace("xai_summary_","")+" · fetched "+ago(v.ts);$("xai").appendChild(t);});
+  if(!Object.keys(SNAP.xai_summaries||{}).length)$("xai").textContent="No X discovery digest yet (first fetch may still be pending or budget-limited).";
+  // alert history
+  $("ahist").textContent="";
+  const ah=(SNAP.alert_history||[]).slice().reverse();
+  if(!ah.length){const d=document.createElement("div");d.className="meta";d.textContent="No alerts sent yet. Urgent alerts go to Slack (critical, or high with personal relevance).";$("ahist").appendChild(d);}
+  ah.forEach(a=>{const d=document.createElement("div");d.className="ahist";d.textContent=`${fmtTime(a.ts)} · ${a.severity} · ${a.kind} · ${a.title}`;$("ahist").appendChild(d);});
+}
+function outlookBase(){
+  const e=SNAP.events;
+  const hi=e.filter(x=>["critical","high"].includes(x.severity)&&(x.tags||[]).some(t=>["flights","fuel","shipping","electricity","internet"].includes(t)));
+  if(!hi.length)return "No credibly confirmed developments in the last 24h point to direct effects on Bangkok: flights continue normal routing, no reported impact on Thai-bound fuel logistics, electricity, or internet. Usual daily life continues; keep normal vigilance.";
+  return hi.slice(0,3).map(x=>"Watch: "+x.title).join(" · ")+" Baseline expectation: monitoring continues; no confirmed direct local effect yet.";
+}
+function outlookEsc(){
+  return "If Hormuz shipping disruption or airspace closures persist 24-72h: tanker insurance and freight rise → Thai pump/jet-fuel prices adjust with 1-2 week lag; Europe-bound flights reroute adding hours and fares; LNG spot prices lift electricity costs regionally. Trigger to reassess: any 'confirmed' event tagged shipping+flights, or Brent +10% intraday.";
+}
+async function tick(){
+  try{
+    const r=await fetch("/data/snapshot.json?ts="+Date.now(),{cache:"no-store"});
+    if(!r.ok)throw new Error("HTTP "+r.status);
+    SNAP=await r.json();render();
+    const age=(Date.now()/1000-SNAP.as_of)/60;
+    document.title=(age>45?"⚠ STALE ":"")+("Iran-Mideast · Bangkok "+SNAP.level);
+  }catch(e){$("fresh").textContent="⚠ cannot load snapshot: "+e.message+" (background fetcher may be paused)";}
+}
+document.querySelectorAll(".filters select").forEach(s=>s.addEventListener("change",render));
+tick();setInterval(tick,(window.CFG?CFG.refresh:45)*1000);
+</script>
+</body></html>

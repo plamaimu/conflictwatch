@@ -1,0 +1,13 @@
+[Unit]
+Description=ConflictWatch dashboard web server (port 8220)
+After=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 %h/Projects/conflictwatch/serve.py
+Restart=on-failure
+RestartSec=5
+Nice=10
+
+[Install]
+WantedBy=default.target

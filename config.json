@@ -1,0 +1,118 @@
+{
+  "project": "conflictwatch",
+  "port": 8220,
+  "timezone": "Asia/Bangkok",
+  "fetch": {
+    "interval_minutes": 15,
+    "user_agent": "Mozilla/5.0 (X11; Linux x86_64) conflictwatch-fetch/1.0",
+    "timeout_seconds": 25,
+    "max_items_per_feed": 60,
+    "history_days_keep": 7
+  },
+  "xai": {
+    "enabled": true,
+    "endpoint": "https://api.x.ai/v1/responses",
+    "model": "grok-4.20-reasoning",
+    "key_env_file": "~/.hermes/.env",
+    "key_name": "XAI_API_KEY",
+    "interval_minutes": 30,
+    "max_calls_per_day": 8,
+    "event_trigger": true,
+    "price_trigger_pct": 5.0,
+    "heartbeat_hours": 24,
+    "queries": [
+      {"tag": "official", "lookback_hours": 24,
+       "handles": ["CENTCOM", "IAEA", "IDFSpokesperson", "StateDept", "IDF", "WhiteHouse", "SecDef", "EU_EEAS"],
+       "text": "Official Middle East conflict announcements in this window: government/military/IAEA statements, strikes, airspace or shipping advisories. Max 5 findings, each with the post link."},
+      {"tag": "sea_impact", "lookback_hours": 24, "handles": [],
+       "text": "Iran/Israel/Hormuz developments affecting Southeast Asia or Thailand in this window: flight reroutes, fuel/energy, shipping freight, subsea cables, markets. Max 5 findings with post links. If nothing credible, say so."}
+    ],
+    "focus": {"lookback_hours": 12, "max_findings": 6}
+  },
+  "sources": [
+    {"name": "BBC Middle East", "type": "rss", "url": "https://feeds.bbci.co.uk/news/world/middle_east/rss.xml", "bias": "independent"},
+    {"name": "BBC World", "type": "rss", "url": "https://feeds.bbci.co.uk/news/world/rss.xml", "bias": "independent"},
+    {"name": "Al Jazeera", "type": "rss", "url": "https://www.aljazeera.com/xml/rss/all.xml", "bias": "independent"},
+    {"name": "CNN World (Google News)", "type": "rss", "url": "https://news.google.com/rss/search?q=site%3Acnn.com%20iran%20OR%20israel%20OR%20hormuz%20when%3A2d&hl=en-US&gl=US&ceid=US:en", "bias": "independent"},
+    {"name": "Reuters (Google News)", "type": "rss", "url": "https://news.google.com/rss/search?q=site%3Areuters.com%20iran%20OR%20israel%20OR%20hormuz%20when%3A2d&hl=en-US&gl=US&ceid=US:en", "bias": "independent-wire"},
+    {"name": "CNA (Google News)", "type": "rss", "url": "https://news.google.com/rss/search?q=site%3Achannelnewsasia.com%20iran%20OR%20%22middle%20east%22%20when%3A2d&hl=en-US&gl=US&ceid=US:en", "bias": "independent"},
+    {"name": "CGTN (Google News)", "type": "rss", "url": "https://news.google.com/rss/search?q=site%3Acgtn.com%20iran%20OR%20israel%20when%3A2d&hl=en-US&gl=US&ceid=US:en", "bias": "state-affiliated (China)"},
+    {"name": "Xinhua (Google News)", "type": "rss", "url": "https://news.google.com/rss/search?q=site%3Aenglish.news.cn%20OR%20site%3Axinhuanet.com%20iran%20OR%20israel%20when%3A2d&hl=en-US&gl=US&ceid=US:en", "bias": "state-affiliated (China)"},
+    {"name": "GNews Iran-Israel", "type": "rss", "url": "https://news.google.com/rss/search?q=iran%20israel%20when%3A1d&hl=en-US&gl=US&ceid=US:en", "bias": "aggregator"},
+    {"name": "GNews Strait of Hormuz", "type": "rss", "url": "https://news.google.com/rss/search?q=%22strait%20of%20hormuz%22%20when%3A2d&hl=en-US&gl=US&ceid=US:en", "bias": "aggregator"},
+    {"name": "GNews Thailand+ME", "type": "rss", "url": "https://news.google.com/rss/search?q=thailand%20(iran%20OR%20israel%20OR%20%22middle%20east%22%20OR%20hormuz)%20when%3A3d&hl=en-US&gl=US&ceid=US:en", "bias": "aggregator"},
+    {"name": "gCaptain (shipping)", "type": "rss", "url": "https://www.gcaptain.com/feed/", "bias": "industry"},
+    {"name": "xAI X-Search", "type": "x_search", "bias": "unverified social"}
+  ],
+  "prices": {
+    "enabled": true,
+    "interval_minutes": 15,
+    "symbols": [
+      {"id": "BZ=F", "label": "Brent crude (USD/bbl)", "impact": "fuel"},
+      {"id": "THB=X", "label": "USD/THB", "impact": "economy"},
+      {"id": "^GSPC", "label": "S&P 500", "impact": "investments"},
+      {"id": "^STOXX50E", "label": "EURO STOXX 50", "impact": "investments"}
+    ]
+  },
+  "keywords": {
+    "flights": ["airspace clos", "no-fly", "notam", "flight divert", "flight cancel", "rerout", "airline suspend", "airport clos", "overflight", "missile trajector"],
+    "fuel": ["brent", "crude", "oil price", "refinery", "fuel price", "diesel", "jet fuel", "ptt", "bangchak", "pump price", "oil surge", "barrel"],
+    "electricity": ["lng", "natural gas", "gas price", "power plant", "grid", "blackout", "electricity tariff", "egat", "spp"],
+    "internet": ["submarine cable", "sea-max", "internet outage", "bgp", "dns", "telecom"],
+    "shipping": ["hormuz", "red sea", "suez", "tanker", "cargo", "container", "freight rate", "war risk", "houthi", "ship attack", "insurance"],
+    "safety": ["strike", "missile", "bomb", "explosion", "attack", "air raid", "drone attack", "invasion", "casualties", "killed", "nuclear", "israel hi", "iran hi", "us hi", "iraq hi", "gulf"],
+    "investments": ["sanction", "markets", "stocks", "gold", "sp", "s&p", "sell-off", "rally", "investor", "baht"],
+    "thailand": ["thailand", "thai", "bangkok", "suvarnabhumi", "dmk", "mfa", "foreign ministry", "royal thai", "embassy"]
+  },
+  "regions": {
+    "iran": ["iran", "tehran", "isfahan", "qeshm", "hormozgan", "bushehr", "natanz", "fordow", "irgc"],
+    "israel/palestine": ["israel", "tel aviv", "jerusalem", "gaza", "hezbollah", "lebanon", "idf"],
+    "gulf": ["hormuz", "uae", "dubai", "abu dhabi", "qatar", "doha", "bahrain", "kuwait", "saudi", "riyadh", "oman", "muscat", "iraq", "baghdad", "yemen", "aden"],
+    "red sea/suez": ["red sea", "suez", "sumer"],
+    "southeast asia": ["thailand", "bangkok", "sea", "asean", "singapore", "vietnam", "malaysia", "indonesia", "manila"],
+    "global": ["us", "washington", "pentagon", "nato", "un ", "united nations", "security council", "europe", "china", "beijing", "moscow", "russia", "global", "markets"]
+  },
+  "severity_rules": {
+    "critical_terms": ["nuclear weapon", "detonation", "nuclear strike", "radiological release", "iaea confirms nuclear", "war declared", "blockade of the strait of hormuz", "hormuz closed to"],
+    "high_terms": ["airspace clos", "airspace closure", "tanker hit", "ship struck", "missile attack", "strikes on", "carries out", "conducts", "struck", "explosion", "embassy", "oil surges", "oil spikes", "oil jumps", "sails through", "seized", "captured"],
+    "escalation_requires_multi_source": true
+  },
+  "alert": {
+    "enabled": true,
+    "min_severity": "critical",
+    "min_severity_personal": "high",
+    "personal_tags": ["flights", "fuel", "electricity", "internet", "shipping", "thailand"],
+    "cooldown_hours": 6,
+    "history_max_entries": 40
+  },
+  "airspace": {
+    "enabled": true,
+    "sweep_interval_minutes": 30,
+    "warmup_samples": 4,
+    "collapse_ratio": 0.5,
+    "decline_ratio": 0.65,
+    "alert_boxes": ["iraq_levant", "gulf", "tehran", "red_sea"],
+    "boxes": [
+      {"id": "tehran", "label": "Tehran FIR corridor", "min": [24, 44], "max": [40, 62]},
+      {"id": "iraq_levant", "label": "Iraq–Levant corridor", "min": [29, 34], "max": [38, 47]},
+      {"id": "gulf", "label": "Gulf / Hormuz", "min": [24, 47], "max": [31, 57]},
+      {"id": "red_sea", "label": "Red Sea–Yemen", "min": [12, 30], "max": [32, 45]},
+      {"id": "eu_route", "label": "Thai↔Europe route (C. Asia–Caspian corridor)", "min": [30, 45], "max": [55, 85], "personal": true},
+      {"id": "thailand", "label": "Thailand reference", "min": [5, 97], "max": [20, 106], "personal": true}
+    ]
+  },
+  "flights": {
+    "enabled": true,
+    "key_file": "~/.conflictwatch/rapidapi_key",
+    "host": "airlabs-co.p.rapidapi.com",
+    "base_url": "https://airlabs-co.p.rapidapi.com/v1/flights",
+    "list": [],
+    "check_daily_minutes": 360,
+    "alert_statuses": ["Cancelled", "Diverted", "Landed (Alternate)", "Cancelled (weather)"]
+  },
+  "dashboard": {
+    "refresh_seconds": 45,
+    "stale_after_minutes": 45,
+    "feed_limit": 120
+  }
+}
