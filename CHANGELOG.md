@@ -1,5 +1,9 @@
 # CHANGELOG — conflictwatch
 
+## 2026-11-03 — SERVICE PAUSED (owner decision)
+- Owner reported the board not surfacing news important enough to justify it; all runtime stopped: fetch timer + server disabled (user units), Slack watcher cron removed. Code, docs, and repo remain; state/ retained for post-mortem or revival. Root-cause discussion pending.
+
+
 ## 2026-11-03 — v1.2.3 heartbeat 4 h → 24 h (user: "24h")
 - Quiet-day xAI floor now ≈ $0.14–0.27/day (one 2-query heartbeat window + event windows as they occur, hard ceiling 8 queries/day ≈ $1.10). Realistic band $5–15/month. Blind-spot trade: an X-only signal that RSS never echoes can go unpulled for up to 24 h; events bypass this entirely (they trigger immediately).
 
